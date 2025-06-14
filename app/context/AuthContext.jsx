@@ -45,45 +45,46 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  // Mock login function
   const login = async (email, password) => {
-    setLoading(true);
     try {
+      setLoading(true);
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      const foundUser = MOCK_USERS.find(
-        u => u.email === email && u.password === password
-      );
-
-      if (!foundUser) {
+      // Mock login validation
+      const user = MOCK_USERS.find(u => u.email === email);
+      if (!user) {
         throw new Error('Invalid email or password');
       }
 
-      // Don't store password in user object
-      const { password: _, ...userWithoutPassword } = foundUser;
-      
-      setUser(userWithoutPassword);
-      localStorage.setItem('user', JSON.stringify(userWithoutPassword));
-      
-      // Redirect based on role
-      switch (userWithoutPassword.role) {
-        case 'client':
-          router.push('/dashboard');
-          break;
-        case 'provider':
-          router.push('/provider/dashboard');
-          break;
-        case 'admin':
-          router.push('/admin/dashboard');
-          break;
-        default:
-          router.push('/');
+      // In a real app, we would validate the password here
+      // For mock purposes, we'll just check if it's not empty
+      if (!password) {
+        throw new Error('Invalid email or password');
       }
 
-      return { success: true };
+      // Set user state and store in localStorage
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Check for pending booking
+      const pendingBooking = localStorage.getItem('pendingBooking');
+      const redirectPath = localStorage.getItem('redirectAfterLogin');
+
+      // Clear the stored redirect path
+      localStorage.removeItem('redirectAfterLogin');
+
+      // Return success with redirect path
+      return {
+        success: true,
+        redirectPath: redirectPath || (user.role === 'provider' ? '/provider/dashboard' : '/dashboard'),
+        pendingBooking: pendingBooking ? JSON.parse(pendingBooking) : null
+      };
     } catch (error) {
-      return { success: false, error: error.message };
+      return {
+        success: false,
+        error: error.message
+      };
     } finally {
       setLoading(false);
     }
