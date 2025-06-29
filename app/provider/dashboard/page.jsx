@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/context/AuthContext';
 import Link from 'next/link';
+import UserAvatar from '@/app/components/UserAvatar';
 
 // Mock data - will be replaced with real data from API
 const MOCK_BOOKINGS = [
@@ -161,10 +162,16 @@ export default function ProviderDashboard() {
             </div>
             <div className="mt-4 md:mt-0 flex space-x-3">
               <Link
-                href="/provider/onboarding"
+                href="/provider/profile"
                 className="bg-rose-primary text-white px-4 py-2 rounded-md hover:bg-rose-dark transition-colors"
               >
-                Edit Profile
+                Profile Settings
+              </Link>
+              <Link
+                href="/provider/onboarding"
+                className="bg-gold-light text-dark-blue px-4 py-2 rounded-md hover:bg-gold-dark transition-colors"
+              >
+                Edit Services
               </Link>
               <button
                 onClick={() => router.push('/')}

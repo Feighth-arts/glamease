@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
 import MPESASimulator from '@/app/components/MPESASimulator';
+import UserAvatar from '@/app/components/UserAvatar';
 
 // Mock data - will be replaced with API data
 const MOCK_PROVIDER = {
@@ -186,10 +187,10 @@ export default function ProviderProfile() {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             {/* Provider Image */}
             <div className="w-32 h-32 rounded-full overflow-hidden flex-shrink-0">
-              <img
-                src={MOCK_PROVIDER.image}
-                alt={MOCK_PROVIDER.name}
-                className="w-full h-full object-cover"
+              <UserAvatar 
+                user={MOCK_PROVIDER}
+                size="2xl"
+                className="w-full h-full"
               />
             </div>
 

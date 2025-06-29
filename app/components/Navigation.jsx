@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/app/context/AuthContext';
+import UserAvatar from '@/app/components/UserAvatar';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +42,10 @@ export default function Navigation() {
                     Dashboard
                   </Link>
                 )}
-                <span className="text-sm text-gray-600">Hi, {user.name}</span>
+                <div className="flex items-center space-x-2">
+                  <UserAvatar user={user} size="sm" />
+                  <span className="text-sm text-gray-600">Hi, {user.name}</span>
+                </div>
                 <button 
                   onClick={logout}
                   className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
