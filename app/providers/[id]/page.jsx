@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/app/context/AuthContext';
+import MPESASimulator from '@/app/components/MPESASimulator';
 
 // Mock data - will be replaced with API data
 const MOCK_PROVIDER = {
@@ -56,6 +57,8 @@ export default function ProviderProfile() {
   const [paymentMethod, setPaymentMethod] = useState('money');
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [bookingState, setBookingState] = useState(null);
+  const [showMPESASimulator, setShowMPESASimulator] = useState(false);
+  const [currentBooking, setCurrentBooking] = useState(null);
 
   // Check if we have a saved booking state in localStorage
   useEffect(() => {
@@ -95,14 +98,73 @@ export default function ProviderProfile() {
       return;
     }
 
-    // Proceed with booking
-    console.log('Booking with:', {
+    // Get selected service details
+    const selectedServiceData = MOCK_PROVIDER.services.find(s => s.id === selectedService);
+    if (!selectedServiceData) {
+      alert('Please select a service.');
+      return;
+    }
+
+    // Create booking object
+    const booking = {
+      id: Date.now(),
       serviceId: selectedService,
       date: selectedDate,
       time: selectedTime,
       paymentMethod,
-      userId: user.id,
-    });
+      amount: selectedServiceData.price,
+      pointsCost: selectedServiceData.pointsCost,
+      providerName: MOCK_PROVIDER.name,
+      serviceName: selectedServiceData.name,
+    };
+
+    // Handle different payment methods
+    if (paymentMethod === 'money') {
+      // Show MPESA simulator for money payments
+      setCurrentBooking(booking);
+      setShowMPESASimulator(true);
+    } else {
+      // Handle points payment (immediate booking)
+      handlePointsPayment(booking);
+    }
+  };
+
+  const handlePointsPayment = (booking) => {
+    // In a real app, this would check if user has enough points
+    const userPoints = 125; // Mock user points
+    
+    if (userPoints < booking.pointsCost) {
+      alert(`Insufficient points. You have ${userPoints} points, but need ${booking.pointsCost} points for this service.`);
+      return;
+    }
+
+    // Process points payment
+    alert(`Booking confirmed! ${booking.pointsCost} points deducted from your account.`);
+    
+    // In a real app, this would save the booking to the database
+    console.log('Points booking:', booking);
+    
+    // Redirect to dashboard or show success message
+    router.push('/dashboard');
+  };
+
+  const handleMPESAPaymentSuccess = (paymentData) => {
+    // In a real app, this would update the booking status in the database
+    console.log('MPESA payment successful:', paymentData);
+    
+    alert(`Payment successful! Transaction ID: ${paymentData.transactionId}`);
+    
+    // Close the simulator
+    setShowMPESASimulator(false);
+    setCurrentBooking(null);
+    
+    // Redirect to dashboard
+    router.push('/dashboard');
+  };
+
+  const handleMPESAPaymentFailed = () => {
+    alert('Payment failed. Please try again.');
+    setShowMPESASimulator(false);
   };
 
   const handleLoginClick = () => {
@@ -402,6 +464,18 @@ export default function ProviderProfile() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* MPESA Payment Simulator */}
+      {showMPESASimulator && currentBooking && (
+        <MPESASimulator
+          isOpen={showMPESASimulator}
+          onClose={() => setShowMPESASimulator(false)}
+          amount={currentBooking.amount}
+          bookingId={currentBooking.id}
+          onPaymentSuccess={handleMPESAPaymentSuccess}
+          onPaymentFailed={handleMPESAPaymentFailed}
+        />
       )}
     </div>
   );

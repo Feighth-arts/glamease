@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAuth } from '@/app/context/AuthContext';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="bg-white shadow-sm fixed w-full z-50">
@@ -28,18 +30,41 @@ export default function Navigation() {
             <Link href="/about" className="text-dark-blue hover:text-rose-primary transition-colors">
               About
             </Link>
-            <Link 
-              href="/login" 
-              className="bg-rose-primary text-white px-4 py-2 rounded-md hover:bg-rose-dark transition-colors"
-            >
-              Login
-            </Link>
-            <Link 
-              href="/signup" 
-              className="bg-gold-light text-dark-blue px-4 py-2 rounded-md hover:bg-gold-dark transition-colors"
-            >
-              Sign Up
-            </Link>
+            
+            {user ? (
+              <div className="flex items-center space-x-4">
+                {(user.role === 'provider' || user.role === 'client') && (
+                  <Link 
+                    href={user.role === 'provider' ? '/provider/dashboard' : '/dashboard'} 
+                    className="text-dark-blue hover:text-rose-primary transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <span className="text-sm text-gray-600">Hi, {user.name}</span>
+                <button 
+                  onClick={logout}
+                  className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-4">
+                <Link 
+                  href="/login" 
+                  className="bg-rose-primary text-white px-4 py-2 rounded-md hover:bg-rose-dark transition-colors"
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/signup" 
+                  className="bg-gold-light text-dark-blue px-4 py-2 rounded-md hover:bg-gold-dark transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -82,18 +107,43 @@ export default function Navigation() {
             >
               About
             </Link>
-            <Link 
-              href="/login" 
-              className="block px-3 py-2 bg-rose-primary text-white rounded-md hover:bg-rose-dark transition-colors"
-            >
-              Login
-            </Link>
-            <Link 
-              href="/signup" 
-              className="block px-3 py-2 bg-gold-light text-dark-blue rounded-md hover:bg-gold-dark transition-colors"
-            >
-              Sign Up
-            </Link>
+            
+            {user ? (
+              <>
+                {(user.role === 'provider' || user.role === 'client') && (
+                  <Link 
+                    href={user.role === 'provider' ? '/provider/dashboard' : '/dashboard'} 
+                    className="block px-3 py-2 text-dark-blue hover:text-rose-primary transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <div className="px-3 py-2 text-sm text-gray-600">
+                  Hi, {user.name}
+                </div>
+                <button 
+                  onClick={logout}
+                  className="block w-full text-left px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="block px-3 py-2 bg-rose-primary text-white rounded-md hover:bg-rose-dark transition-colors"
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/signup" 
+                  className="block px-3 py-2 bg-gold-light text-dark-blue rounded-md hover:bg-gold-dark transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

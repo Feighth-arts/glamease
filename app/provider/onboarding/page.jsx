@@ -55,8 +55,14 @@ export default function ProviderOnboarding() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Save to localStorage for dashboard access
+    localStorage.setItem('providerServices', JSON.stringify(services));
+    localStorage.setItem('providerSchedule', JSON.stringify(schedule));
+    
     // In a real app, this would save to the backend
     console.log({ services, schedule });
+    
     // Redirect to provider dashboard
     router.push('/provider/dashboard');
   };
