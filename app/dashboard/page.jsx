@@ -66,7 +66,7 @@ export default function ClientDashboard() {
             </div>
             <div className="mt-4 md:mt-0 flex space-x-3">
               <Link
-                href="/providers"
+                href="/services"
                 className="bg-rose-primary text-white px-4 py-2 rounded-md hover:bg-rose-dark transition-colors"
               >
                 Book Service
@@ -179,7 +179,7 @@ export default function ClientDashboard() {
                     <h3 className="text-lg font-semibold text-dark-blue mb-4">Quick Actions</h3>
                     <div className="space-y-3">
                       <Link
-                        href="/providers"
+                        href="/services"
                         className="block w-full bg-rose-primary text-white text-center py-3 rounded-md hover:bg-rose-dark transition-colors"
                       >
                         Book New Service

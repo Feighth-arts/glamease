@@ -22,11 +22,11 @@ export default function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
+            <Link href="/" className="text-dark-blue hover:text-rose-primary transition-colors">
+              Home
+            </Link>
             <Link href="/services" className="text-dark-blue hover:text-rose-primary transition-colors">
               Services
-            </Link>
-            <Link href="/providers" className="text-dark-blue hover:text-rose-primary transition-colors">
-              Find Providers
             </Link>
             <Link href="/about" className="text-dark-blue hover:text-rose-primary transition-colors">
               About
@@ -94,16 +94,16 @@ export default function Navigation() {
         <div className="md:hidden bg-white">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link 
+              href="/" 
+              className="block px-3 py-2 text-dark-blue hover:text-rose-primary transition-colors"
+            >
+              Home
+            </Link>
+            <Link 
               href="/services" 
               className="block px-3 py-2 text-dark-blue hover:text-rose-primary transition-colors"
             >
               Services
-            </Link>
-            <Link 
-              href="/providers" 
-              className="block px-3 py-2 text-dark-blue hover:text-rose-primary transition-colors"
-            >
-              Find Providers
             </Link>
             <Link 
               href="/about" 
