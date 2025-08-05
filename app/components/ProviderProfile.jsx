@@ -12,7 +12,13 @@ export default function ProviderProfile({ provider }) {
         </div>
         <div className="flex-1">
           <h2 className="text-2xl font-bold text-dark-blue mb-2">{provider.name}</h2>
+          {provider.businessName && (
+            <p className="text-gray-700 mb-1 font-medium">{provider.businessName}</p>
+          )}
           <p className="text-gray-600 mb-2">{provider.location}</p>
+          {provider.phone && (
+            <p className="text-gray-500 mb-2">Phone: {provider.phone}</p>
+          )}
           <p className="text-gray-700 mb-2">{provider.bio}</p>
           {provider.specialties && (
             <p className="text-gray-500 mb-2">Specialties: {provider.specialties}</p>
